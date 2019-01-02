@@ -1,4 +1,4 @@
-console.log('Yo App.js is running');
+console.log('App.js is running');
 
 const app = {
   title: 'I am a title',
