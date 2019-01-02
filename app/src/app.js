@@ -1,60 +1,117 @@
-console.log('App.js is running');
-
-const app = {
-  title: 'I am a title',
-  options: []
-};
-
-const onFormSubmit = (e) => {
-  e.preventDefault();
-
-  const option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = '';
-    render();
+class MyApp extends React.Component {
+  render() {
+    const title = 'Mono App';
+    const subtitle = 'First try';
+    
+    return (
+      <div>
+        <Header title={title} subtitle={subtitle} />
+        <Counter />
+        <VisibilityToggle />
+      </div>
+    );
   }
-};
+}
+//class Navigation extends React.Component{
+  //render() {
+    //return(
+      //<div>
+        //<Nav>
+          //<Navitem>
+            //<Link to="home">Home</Link>
+          //</Navitem>
+        //</Nav>
+      //</div>
+    //);
+  //}
+//}
 
-const onRemove = () => {
-  app.options = [];
-  render();
-};
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>{this.props.title}</h1>
+        <h2>{this.props.subtitle}</h2>
+      </div>
+    );
+  }
+}
 
-const onMakeDecision = () => {
-  const randomNum = Math.floor(Math.random() * app.options.length);
-  const option = app.options[randomNum];
-  alert(option);
-};
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleAddOne = this.handleAddOne.bind(this);
+    this.handleMinusOne = this.handleMinusOne.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+    this.state = {
+      count: 0
+    };
+  }
+  handleAddOne() {
+    this.setState((prevState) => {
+      return {
+        count: prevState.count + 1
+      };
+    });
+  }
+  handleMinusOne() {
+    this.setState((prevState) => {
+      return {
+        count: prevState.count - 1
+      };
+    });
+  }
+  handleReset() {
+    this.setState(() => {
+      return {
+        count: 0
+      };
+    });
+  }
+  render() {
+    return (
+      <div>
+        <h1>Count: {this.state.count}</h1>
+        <button onClick={this.handleAddOne}>+1</button>
+        <button onClick={this.handleMinusOne}>-1</button>
+        <button onClick={this.handleReset}>Reset</button>
+      </div>
+    );
+  }
+}
 
+class VisibilityToggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
+    this.state = {
+      visibility: false
+    };
+  }
+  handleToggleVisibility() {
+    this.setState((prevState) => {
+      return {
+        visibility: !prevState.visibility
+      };
+    });
+  }
+  render() {
+    return(
+      <div>
+        <h1>Visibility toggle</h1>
+            <button onClick={this.handleToggleVisibility}>
+                {this.state.visibility ? 'Hide details' : 'Show details'}
+            </button>
+            {this.state.visibility && (
+                <div>
+                    <p>My content</p>
+                </div>
+            )}
+      </div>
+    );
+  }
+}
 
-const appRoot = document.getElementById('app');
-
-const render = () => {
-  const template = (
-    <div>
-      <h1>{app.title}</h1>
-      <p>{app.options.length > 0 ? 'Nice decision' : 'No decision'}</p>
-      <button disabled={app.options.length === 0} onClick={onMakeDecision}>What should i pick?</button>
-      <button onClick={onRemove}>Remove</button>
-      <ol>
-        {
-          app.options.map((text) => {
-            return <li key={text}>{text}</li>;
-          })
-        }
-      </ol>
-      <form onSubmit={onFormSubmit}>
-        <input type="text" name="option" />
-        <button>Add</button>
-      </form>
-    </div>
-  );
-
-  ReactDOM.render(template, appRoot);
-};
-
-render();
+ReactDOM.render(<MyApp/>, document.getElementById('app'));  
 
   
